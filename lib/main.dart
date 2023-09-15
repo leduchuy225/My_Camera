@@ -1,20 +1,28 @@
+import 'dart:async';
+
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const MainApp());
-}
+import 'screens/take_picture_screen.dart';
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+Future<void> main() async {
+  // Ensure that plugin services are initialized so that `availableCameras()`
+  // can be called before `runApp()`
+  WidgetsFlutterBinding.ensureInitialized();
 
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
+  // Obtain a list of the available cameras on the device.
+  final cameras = await availableCameras();
+
+  // Get a specific camera from the list of available cameras.
+  final firstCamera = cameras.first;
+
+  runApp(
+    MaterialApp(
+      theme: ThemeData.dark(),
+      home: TakePictureScreen(
+        // Pass the appropriate camera to the TakePictureScreen widget.
+        camera: firstCamera,
       ),
-    );
-  }
+    ),
+  );
 }
